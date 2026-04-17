@@ -125,7 +125,7 @@
   <div class="max-w-xl mx-auto grid gap-4">
     <input id="name" placeholder="Name" class="p-3 bg-black border border-gray-700 rounded-xl">
     <input id="event" placeholder="Event" class="p-3 bg-black border border-gray-700 rounded-xl">
-    <input id="date" type="date" class="p-3 bg-black border border-gray-700 rounded-xl">
+   
 
     <select id="plan" class="p-3 bg-black border border-gray-700 rounded-xl">
       <option>Basic ₹299</option>
@@ -254,10 +254,9 @@ function order(plan){
 function sendOrder(){
   const name=document.getElementById('name').value;
   const event=document.getElementById('event').value;
-  const date=document.getElementById('date').value;
   const plan=document.getElementById('plan').value;
 
-  const msg=`Name:${name} Event:${event} Date:${date} Plan:${plan}`;
+  const msg=`Name:${name} Event:${event} Plan:${plan}`;
   window.open(`https://wa.me/917039570750?text=${encodeURIComponent(msg)}`);
 }
 
