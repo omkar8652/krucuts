@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KRUCUTS Invites</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body { font-family: sans-serif; }
+
+    .gradient-text {
+      background: linear-gradient(90deg,#22c55e,#4ade80);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    ::-webkit-scrollbar { display: none; }
+    html { scrollbar-width: none; }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+
+<body class="text-white">
+
+<!-- BACKGROUND -->
+<div class="fixed inset-0 -z-10">
+  <div id="slideshow" class="w-full h-full bg-cover bg-center"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-black/40 border-b border-white/10">
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+    <h1 class="text-lg md:text-xl font-semibold">KRUCUTS</h1>
+
+    <div class="flex items-center gap-6 text-sm md:text-base">
+      <a href="#portfolio">Work</a>
+      <a href="#pricing">Pricing</a>
+      <a href="https://wa.me/917039570750"
+         class="bg-green-500 hover:bg-green-600 px-5 py-2 rounded-full">
+        Order
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="h-screen flex flex-col justify-center items-center text-center px-6">
+  <h2 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+    Digital Invites That Feel <span class="gradient-text">Luxury</span>
+  </h2>
+
+  <p class="text-gray-300 mb-8">
+    Wedding • Birthday • Engagement • Video Invites
+  </p>
+
+  <a href="https://wa.me/917039570750"
+     class="bg-green-500 px-6 py-3 rounded-full">
+    Order on WhatsApp
+  </a>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="px-8 py-20 text-center">
+  <h3 class="text-3xl font-bold mb-10">Our Work</h3>
+  <div id="portfolioContainer" class="flex gap-6 overflow-x-auto hide-scrollbar px-4"></div>
+</section>
+
+<!-- VIEWER -->
+<div id="viewer" class="fixed inset-0 bg-black/90 hidden flex items-center justify-center z-50">
+  <div id="viewerOverlay" class="absolute inset-0"></div>
+
+  <span onclick="closeViewer()" class="absolute top-6 right-8 text-3xl cursor-pointer z-20">✖</span>
+
+  <img id="viewerImg" class="max-h-[80%] hidden rounded-xl relative z-10">
+  <video id="viewerVideo" controls class="max-h-[80%] hidden rounded-xl relative z-10"></video>
+</div>
+
+<!-- PRICING -->
+<section id="pricing" class="px-8 py-20 text-center">
+  <h3 class="text-3xl font-bold mb-10">Pricing</h3>
+
+  <div class="grid md:grid-cols-3 gap-6">
+
+    <!-- CARD -->
+    <div class="bg-white/10 backdrop-blur-md p-6 rounded-3xl 
+    transition-all duration-300 border border-transparent 
+    hover:border-green-500 hover:shadow-lg hover:shadow-green-500/20 hover:scale-105">
+      <h4>Basic</h4>
+      <p class="text-2xl">₹299</p>
+      <button onclick="order('Basic ₹299')" class="bg-green-500 px-4 py-2 rounded-full mt-3">Choose</button>
+    </div>
+
+    <!-- CARD -->
+    <div class="bg-white/10 backdrop-blur-md p-6 rounded-3xl 
+    transition-all duration-300 border border-transparent 
+    hover:border-green-500 hover:shadow-lg hover:shadow-green-500/20 hover:scale-105">
+      <h4>Premium</h4>
+      <p class="text-2xl">₹799</p>
+      <button onclick="order('Premium ₹799')" class="bg-green-500 px-4 py-2 rounded-full mt-3">Choose</button>
+    </div>
+
+    <!-- CARD -->
+    <div class="bg-white/10 backdrop-blur-md p-6 rounded-3xl 
+    transition-all duration-300 border border-transparent 
+    hover:border-green-500 hover:shadow-lg hover:shadow-green-500/20 hover:scale-105">
+      <h4>Luxury</h4>
+      <p class="text-2xl">₹1499</p>
+      <button onclick="order('Luxury ₹1499')" class="bg-green-500 px-4 py-2 rounded-full mt-3">Choose</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section class="px-8 py-20 text-center bg-black/60">
+  <h3 class="text-3xl font-bold mb-10">Place Your Order</h3>
+
+  <div class="max-w-xl mx-auto grid gap-4">
+    <input id="name" placeholder="Name" class="p-3 bg-black border border-gray-700 rounded-xl">
+    <input id="event" placeholder="Event" class="p-3 bg-black border border-gray-700 rounded-xl">
+    <input id="date" type="date" class="p-3 bg-black border border-gray-700 rounded-xl">
+
+    <select id="plan" class="p-3 bg-black border border-gray-700 rounded-xl">
+      <option>Basic ₹299</option>
+      <option>Premium ₹799</option>
+      <option>Luxury ₹1499</option>
+    </select>
+
+    <button onclick="sendOrder()" class="bg-green-500 py-3 rounded-xl">
+      Send on WhatsApp
+    </button>
+  </div>
+</section>
+
+<script>
+
+/* BACKGROUND */
+const bgImages = ['.//img1.jpg','.//img2.jpg','.//img3.jpg'];
+let i = 0;
+const slideshow = document.getElementById('slideshow');
+
+function changeBg() {
+  slideshow.style.backgroundImage = `url(${bgImages[i]})`;
+  i = (i + 1) % bgImages.length;
+}
+changeBg();
+setInterval(changeBg, 4000);
+
+/* PORTFOLIO WITH PRICE */
+const portfolioItems = [
+  { type:"image", src:".//img1.jpg", price:"₹299" },
+  { type:"video", src:".//W_V_1.MP4", poster:".//W_V_1.jpg", price:"₹599" },
+  { type:"video", src:".//W_V_2.MP4", poster:".//W_V_2.jpg", price:"₹999" },
+  { type:"video", src:".//W_V_3.MP4", poster:".//W_V_3.jpg", price:"₹1499" },
+  { type:"image", src:".//Port1.jpg", price:"₹249" },
+  { type:"image", src:".//Port2.jpg", price:"₹349" },
+  { type:"image", src:".//img2.jpg", price:"₹249" },
+  { type:"image", src:".//img3.jpg", price:"₹249" }
+];
+
+const container = document.getElementById("portfolioContainer");
+
+portfolioItems.forEach(item => {
+  const card = document.createElement("div");
+  card.className = "min-w-[260px] h-64 rounded-3xl overflow-hidden relative cursor-pointer";
+
+  if(item.type==="image"){
+    card.innerHTML = `
+      <img src="${item.src}" class="w-full h-full object-cover">
+
+      <div class="absolute top-3 left-3 bg-black/60 px-3 py-1 rounded-full text-sm">${item.price}</div>
+
+      <div class="absolute bottom-3 left-3 flex gap-2">
+        <button onclick="event.stopPropagation(); order('${item.price}')" class="bg-green-500 px-3 py-1 rounded-full text-sm">Order</button>
+        
+      </div>
+    `;
+  } else {
+    card.innerHTML = `
+      <div class="relative w-full h-full">
+        <video src="${item.src}" poster="${item.poster}" muted class="w-full h-full object-cover"></video>
+
+        <div class="absolute top-3 left-3 bg-black/60 px-3 py-1 rounded-full text-sm">${item.price}</div>
+
+        <div class="absolute inset-0 flex items-center justify-center playBtn">
+          <div class="bg-white/20 backdrop-blur-md p-5 rounded-full text-3xl border border-white/30">▶</div>
+        </div>
+
+        <div class="absolute bottom-3 left-3 flex gap-2">
+          <button onclick="event.stopPropagation(); order('${item.price}')" class="bg-green-500 px-3 py-1 rounded-full text-sm">Order</button>
+          
+        </div>
+      </div>
+    `;
+  }
+
+  const video = card.querySelector("video");
+
+  if(video){
+    card.addEventListener("mouseenter",()=>{
+      video.play();
+      card.querySelector(".playBtn").style.display="none";
+    });
+
+    card.addEventListener("mouseleave",()=>{
+      video.pause();
+      video.currentTime=0;
+      card.querySelector(".playBtn").style.display="flex";
+    });
+  }
+
+  card.onclick = ()=>openViewer(item.type,item.src);
+  container.appendChild(card);
+});
+
+/* VIEWER */
+function openViewer(type,src){
+  const viewer=document.getElementById('viewer');
+  const img=document.getElementById('viewerImg');
+  const video=document.getElementById('viewerVideo');
+
+  viewer.classList.remove('hidden');
+
+  if(type==='image'){
+    img.src=src;
+    img.classList.remove('hidden');
+    video.classList.add('hidden');
+  }else{
+    video.src=src;
+    video.classList.remove('hidden');
+    img.classList.add('hidden');
+  }
+}
+
+function closeViewer(){
+  document.getElementById('viewer').classList.add('hidden');
+  document.getElementById('viewerVideo').pause();
+}
+
+document.getElementById("viewerOverlay").onclick = closeViewer;
+
+/* WHATSAPP */
+function order(plan){
+  window.open(`https://wa.me/917039570750?text=I want invite for ${plan}`);
+}
+
+function sendOrder(){
+  const name=document.getElementById('name').value;
+  const event=document.getElementById('event').value;
+  const date=document.getElementById('date').value;
+  const plan=document.getElementById('plan').value;
+
+  const msg=`Name:${name} Event:${event} Date:${date} Plan:${plan}`;
+  window.open(`https://wa.me/917039570750?text=${encodeURIComponent(msg)}`);
+}
+
+/* SHARE */
+/*function share(){
+  const url=window.location.href;
+  window.open(`https://wa.me/?text=Check this invite ${url}`);
+}*/
+
+</script>
+
+</body>
+</html>
